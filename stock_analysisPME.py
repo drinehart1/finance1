@@ -10,10 +10,11 @@ REF: https://towardsdatascience.com/python-for-finance-stock-portfolio-analyses-
 """
 import os
 import pandas as pd
-import numpy as np
 from datetime import datetime as dt
 import sqlite3
+import yfinance as yf
 
+# import numpy as np
 # import matplotlib.pyplot as plt
 # import plotly.graph_objs as go
 
@@ -34,13 +35,13 @@ class HistData:
 
     def __init__(self):
         """
-        INIT CONNECTION TO DATABASE
+        INIT CONNECTION TO DATABASE; IMPORTS SCHEMA IF NOT EXISTS
         """
         if self._db_server == "sqlite":
-            _con = sqlite3.connect(self._db_name)
+            self._con = sqlite3.connect(self._db_name)
 
         try:
-            _cur = _con.cursor()
+            self._cur = self._con.cursor()
         except:
             print(
                 "UNABLE TO CONNECT TO DATABASE: \n",
@@ -50,42 +51,48 @@ class HistData:
                 self._db_name,
             )
 
-        try:
-            _cur.execute(
-                """SELECT
-                name
+        # CHECK IF sp500 TABLE EXISTS
+        self._cur.execute(
+            """SELECT
+                COUNT(name)
                 FROM
                 sqlite_master
                 WHERE
                 type = 'table'
                 AND
-                name = '{table_name}'.format('sp500')"""
-            )
-        except:
+                name = 'sp500'"""
+        )
+
+        if self._cur.fetchone()[0] != 1:
             print("INITIALIZE DB...")
             try:
                 sql_file = open(constants.HIST_DB_SCHEMA)
                 sql_as_string = sql_file.read()
-                _cur.executescript(sql_as_string)
+                self._cur.executescript(sql_as_string)
             except FileNotFoundError:
                 print(
                     "DATABASE SCHEMA CREATION FILE MISSING:", constants.HIST_DB_SCHEMA
                 )
 
-            # print("ADDING 'sp500' TABLE")
-            # _cur.execute(
-            #     """CREATE TABLE IF NOT EXISTS sp500 (
-            #         `date` datetime NOT NULL PRIMARY KEY,
-            #         `open` DECIMAL NOT NULL,
-            #         `close` DECIMAL NOT NULL,
-            #         `high` DECIMAL NOT NULL,
-            #         `low` DECIMAL NOT NULL,
-            #         `volume` INT NOT NULL
-            #     );"""
-            # )
+    def qry(self, sql, rtn_results: bool = True, rtn_iterator: bool = False) -> tuple:
+        self._cur.execute(sql)
+        if rtn_results == True:
+            return self._cur.fetchall()
+        else:
+            self._con.commit()
 
-    def qry(self, sql, rtn_results: bool = True) -> tuple:
-        pass
+
+class YahooAPI:
+    """
+    METHODS FOR SCRAPING YAHOO FINANCE
+    ref: https://aroussi.com/post/python-yahoo-finance
+    """
+
+    def capture_historical(self, ticker, p):
+        stock = yf.Ticker(ticker)
+        d = stock.history(period=p)
+        df = pd.DataFrame(data=d)
+        return df  # RETURN DATAFRAME OF ALL HISTORICAL [RAW] QUOTES
 
 
 class DataAccess:
@@ -109,17 +116,73 @@ class DataAccess:
         max = df["DATE"].max().to_pydatetime().date()
         cur_year = dt.today().year
         end_of_last_year = dt(year=cur_year - 1, month=12, day=31).date()
-        return min, max, end_of_last_year
+        diff = (max - min).days
+        return min, max, diff, end_of_last_year
+
+
+def pop_sp500_tables(hist, diff):
+    """
+    SCRAPES YAHOO FINANCE ('^GSPC' IS S&P500 SYMBOL) TO DOWNLOAD HISTORICAL SP500 DATA AND INSERTS INTO DATABASE
+
+    Valid periods are: 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max
+    """
+    y = YahooAPI()
+    if diff < 31:
+        period = "1mo"
+    elif diff < 91:
+        period = "3mo"
+    elif diff < 181:
+        period = "6mo"
+    elif diff < 365:
+        period = "1y"
+    elif diff < 730:
+        period = "2y"
+
+    hist_data = y.capture_historical(
+        "^GSPC", period
+    )  # NOTE RETURNED DATA IS OF TYPE PANDAS DATAFRAME
+
+    for index, row in hist_data.iterrows():
+        result_date = index.to_pydatetime().date()
+
+        sql = """INSERT OR IGNORE INTO sp500 (date, open, close, high, low, volume)
+                 VALUES ('{}', '{}', '{}', '{}', '{}', '{}')
+              """.format(
+            result_date,
+            row["Open"],
+            row["Close"],
+            row["High"],
+            row["Low"],
+            row["Volume"],
+        )
+        # NOTE: USING 'date' AS PRIMARY KEY PREVENTS DUPLICATE ENTRIES
+        # THIS WILL STILL PRODUCE INTEGRITY ERROR - WORKAROUND ADD IGNORE TO SQL
+        # REF: https://stackoverflow.com/questions/36518628/sqlite3-integrityerror-unique-constraint-failed-when-inserting-a-value
+        hist.qry(sql, rtn_results=False)
 
 
 def main():
     data = DataAccess()
     xl_df = data.extract_blotter_data()
-    # print(xl_df[["SYMBOL", "EXTENDED", "DATE"]])
-    min, max, prev_year_end = data.extract_desc_var(xl_df)
-
-    print(min, max, prev_year_end, sep="\n")
+    min, max, diff, prev_year_end = data.extract_desc_var(xl_df)
     hist = HistData()
+
+    # QRY FOR DATA COVERING TIME PERIOD OF INTEREST
+    SQL = "SELECT COUNT(*) FROM sp500 WHERE date >= '{}' AND date <= '{}' ORDER BY date ASC".format(
+        min, max
+    )
+    cnt = hist.qry(SQL)  # RETURNS LIST OF TUPLES
+    datapoints = cnt[0][0]  # CAPTURE FIRST ELEMENT OF LIST; FIRST ELEMENT OF TUPLE
+    if diff > 0:
+        if datapoints / diff < 0.65:  # < 90% OF DATES IN DB; PULL MORE DATA
+            pop_sp500_tables(hist, diff)
+        else:
+            print(
+                "CONTINUE WITH ",
+                round(datapoints / diff * 100, 2),
+                "% of DATES (INCLUDES HOLIDAYS & WEEKENDS)",
+            )
+            # results = hist.qry(SQL, rtn_iterator=True)  # RETURNS LIST OF TUPLES
 
 
 if __name__ == "__main__":
