@@ -1,6 +1,6 @@
 """
 CREATED: 3-JUN-2021
-LAST EDIT: 9-JUN-2021
+LAST EDIT: 11-JUN-2021
 AUTHOR: DUANE RINEHART, MBA (duane.rinehart@gmail.com)
 
 READS blotter.xlsx (SYMBOL,	SHARES,	UNITARY, EXTENDED, DATE, BROKER, EXIT_TARGET)
@@ -50,6 +50,8 @@ class HistData:
                 "HOST (FILENAME IF SQLITE):",
                 self._db_name,
             )
+        # finally:
+        #     self._con.close()
 
         # CHECK IF sp500 TABLE EXISTS
         self._cur.execute(
@@ -172,9 +174,12 @@ def main():
         min, max
     )
     cnt = hist.qry(SQL)  # RETURNS LIST OF TUPLES
+
     datapoints = cnt[0][0]  # CAPTURE FIRST ELEMENT OF LIST; FIRST ELEMENT OF TUPLE
     if diff > 0:
-        if datapoints / diff < 0.65:  # < 90% OF DATES IN DB; PULL MORE DATA
+        if (
+            datapoints / diff < 0.65
+        ):  # < 65%; PULL MORE DATA [NOTE: 71.4% OF DATES ARE M-F 5/7 DAYS PER WEEK; (EXCLUDES HOLIDAYS)]
             pop_sp500_tables(hist, diff)
         else:
             print(
