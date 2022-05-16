@@ -1,7 +1,7 @@
 # SRC: https://github.com/mariostoev/finviz
 
 # CREATED: 30-OCT-2020
-# LAST EDIT: 28-JUN-2021
+# LAST EDIT: 16-MAY-2022
 # AUTHOR: DUANE RINEHART, MBA (duane.rinehart@gmail.com)
 
 # IMPLEMENTS API CONNECTION TO STOCK INFORMATION SERVICE FINVIZ FOR PURPOSES OF STOCK SCREENING
@@ -38,6 +38,7 @@ try:
     # import json
     # import csv
 
+
 except ImportError:
     print("ERROR LOADING PREREQUISITES")
     exit()
@@ -48,7 +49,17 @@ analyst_data = []
 
 
 def load_stock_list():
-    infile = os.path.join(constants.outpath, "blotter.xlsx")
+    """read from blotter.xlsx, which contains [at a minimum] the following fields:
+    "SYMBOL", "SHARES", "UNITARY", "BROKER", "EXIT_TARGET"
+
+    :return: Array of current holdings
+    :rtype: Pandas dataframe
+    """    
+    if os.name == "nt":
+        infile = os.path.join(constants.outpath, "blotter.xlsx")
+    else:
+        infile = os.path.join(constants.outpath_linux, "blotter.xlsx")
+
     return pd.read_excel(infile, sheet_name="master")
 
 
@@ -187,10 +198,16 @@ if __name__ == "__main__":
     now = datetime.now()  # datetime object containing current date and time
     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
     print("SCRIPT START TIMESTAMP:", dt_string)
-    os.chdir(constants.outpath)
-    out_dir = os.path.join(constants.outpath, constants.outfile)
+
+    if os.name == "nt":
+        OUTPATH = constants.outpath
+    else:
+        OUTPATH = constants.outpath_linux
+
+    os.chdir(OUTPATH)
+    out_dir = os.path.join(OUTPATH, constants.outfile)
     print("CURRENT PATH:", os.getcwd())
-    print("OUTPUT DESTINATION:", os.path.join(constants.outpath, constants.outfile))
+    print("OUTPUT DESTINATION:", os.path.join(OUTPATH, constants.outfile))
 
     main(out_dir)
 
