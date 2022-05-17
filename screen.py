@@ -7,7 +7,7 @@
 # IMPLEMENTS API CONNECTION TO STOCK INFORMATION SERVICE FINVIZ FOR PURPOSES OF STOCK SCREENING
 
 # REQUIRES:
-# - PYTHON 3.5+
+# - PYTHON 3.6+
 
 # LOAD PREREQUISITES
 import symtable
@@ -63,7 +63,12 @@ def load_stock_list():
     return pd.read_excel(infile, sheet_name="master")
 
 
-def lookup(stock):
+def lookup(stock : str):
+    """INDIVIDUAL STOCK INFO LOOKUP
+
+    :param stock: STOCK TICKER SYMBOL
+    :type stock: str
+    """    
     stock_data.append(finviz.get_stock(stock))
 
     analyst_raw = {}
@@ -74,7 +79,22 @@ def lookup(stock):
     # print(str(analyst_data))
 
 
-def main(output):
+def main(output : str):
+    """CORE FUNCTIONALITY OF APP:
+    1. LOADs SYMBOLS FROM FILE INTO DATAFRAME
+    2. CALLS MULTI-THREADED LOOKUPS (API TO FINVIZ) & ADDS TO RESULTS DATAFRAME
+    3. BOTH DATAFRAMES ARE RECONCILED (GROUPED ON STOCK SYMBOL) INTO mergeDf
+    4. ROI (RETURN ON INVESTMENT) IS CALCULATED AND DATA FORMATTED BY COLUMN
+    5. VARIOUS WORKSHEETS SAVED INTO CONSOLIDATED EXCEL FILE: 
+      -raw_data
+      -analysts (FROM API CALL)
+      -analysis (INTERNAL CALCS BASED ON PORTFOLIO)
+      -portfolio (DETAILED NAV (NET ASSET VALUE) STOCK HOLDINGS BY SECTOR)
+      -portfolio_breakdown (AGGREGATED HOLDINGS BY SECTOR WITH PERCENTAGE)
+
+    :param output: DESTINATION PATH AND FILE
+    :type output: str
+    """    
     xl_df = load_stock_list()
     stock_list = xl_df["SYMBOL"].unique()  # DEDUPLICATE
     stock_list = xl_df["SYMBOL"].values.tolist()
