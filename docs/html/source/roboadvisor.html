@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>roboadvisor module &#8212; Stock Portfolio Roboadvisor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-roboadvisor">
+<span id="roboadvisor-module"></span><h1>roboadvisor module<a class="headerlink" href="#module-roboadvisor" title="Permalink to this headline">¶</a></h1>
+<p>CREATED: 30-JUL-2021
+LAST EDIT: 5-NOV-2021
+AUTHOR: DUANE RINEHART, MBA (<a class="reference external" href="mailto:duane&#46;rinehart&#37;&#52;&#48;gmail&#46;com">duane<span>&#46;</span>rinehart<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p>
+<p>CREATE ROBO ADVISOR APP TO RECOMMEND STOCK SECTOR INVESTMENTS BASED ON INPUT CRITERIA (1ST ITERATION)
+-CREATE POSSIBLE PORTFOLIOS, SCORE BASED ON SELECTED CRITERIA (INVESTMENT TIME HORIZON, CAPITAL, RISK TOLERANCE)
+-INITIAL INVESTMENTS ARE BASED ON SECTOR ETF FUNDS</p>
+<p>REF: <a class="reference external" href="https://portfolioconstructs.com/blog-detail/18?title=How%20I%20Built%20a%20Robo-Advisor%20Website%20from%20Scratch">https://portfolioconstructs.com/blog-detail/18?title=How%20I%20Built%20a%20Robo-Advisor%20Website%20from%20Scratch</a>
+video: <a class="reference external" href="https://www.youtube.com/watch?v=T-oCi0R0NOI">https://www.youtube.com/watch?v=T-oCi0R0NOI</a> (but does not want to give all secrets away)
+public notes:
+-Our tool heavily weights Expense Ratio, Liquidity and Market Capitalization.
+-output fields: Symbol  Name    Asset Class     Expense Ratio   Price   # of Shares     Total Amount (overall)
+-annual: Dividend Yield Dividend Amount Expense Ratio   Expense Amount
+-previous return: One Week Return       One Month Return        One Year Return Five Year Return (historicals)
+(including classes - equity, bond, commodity, real estate, cash)
+DATA PROVIDERS: IEX Cloud, Yahoo Finance, Alpha Vantage</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="roboadvisor.main">
+<span class="sig-prename descclassname"><span class="pre">roboadvisor.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#roboadvisor.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="roboadvisor.populate_db">
+<span class="sig-prename descclassname"><span class="pre">roboadvisor.</span></span><span class="sig-name descname"><span class="pre">populate_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#roboadvisor.populate_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Stock Portfolio Roboadvisor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DRE Consulting.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/roboadvisor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

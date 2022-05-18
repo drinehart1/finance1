@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>stock_analysisPME module &#8212; Stock Portfolio Roboadvisor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-stock_analysisPME">
+<span id="stock-analysispme-module"></span><h1>stock_analysisPME module<a class="headerlink" href="#module-stock_analysisPME" title="Permalink to this headline">¶</a></h1>
+<p>CREATED: 3-JUN-2021
+LAST EDIT: 11-JUN-2021
+AUTHOR: DUANE RINEHART, MBA (<a class="reference external" href="mailto:duane&#46;rinehart&#37;&#52;&#48;gmail&#46;com">duane<span>&#46;</span>rinehart<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p>
+<p>READS blotter.xlsx (SYMBOL,     SHARES, UNITARY, EXTENDED, DATE, BROKER, EXIT_TARGET)
+COMPARES holding period to SP500 performance ($, days) using PME (Public Market Equivalent) ref: <a class="reference external" href="https://docs.preqin.com/reports/Preqin-Special-Report-PME-July-2015.pdf">https://docs.preqin.com/reports/Preqin-Special-Report-PME-July-2015.pdf</a></p>
+<p>REF: <a class="reference external" href="https://towardsdatascience.com/python-for-finance-stock-portfolio-analyses-6da4c3e61054">https://towardsdatascience.com/python-for-finance-stock-portfolio-analyses-6da4c3e61054</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="stock_analysisPME.DataAccess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stock_analysisPME.</span></span><span class="sig-name descname"><span class="pre">DataAccess</span></span><a class="headerlink" href="#stock_analysisPME.DataAccess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>METHODS FOR EXTRACTING &amp; MANIPULATING RAW DATA</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stock_analysisPME.DataAccess.extract_blotter_data">
+<span class="sig-name descname"><span class="pre">extract_blotter_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stock_analysisPME.DataAccess.extract_blotter_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stock_analysisPME.DataAccess.extract_desc_var">
+<span class="sig-name descname"><span class="pre">extract_desc_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stock_analysisPME.DataAccess.extract_desc_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>EXTRACT DESCRIPTIVE DATA FROM [BLOTTER] DATAFRAME</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stock_analysisPME.HistData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stock_analysisPME.</span></span><span class="sig-name descname"><span class="pre">HistData</span></span><a class="headerlink" href="#stock_analysisPME.HistData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>METHODS FOR CRUD OPERATIONS OF HISTORICAL DATA</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stock_analysisPME.HistData.qry">
+<span class="sig-name descname"><span class="pre">qry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtn_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtn_iterator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#stock_analysisPME.HistData.qry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stock_analysisPME.YahooAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stock_analysisPME.</span></span><span class="sig-name descname"><span class="pre">YahooAPI</span></span><a class="headerlink" href="#stock_analysisPME.YahooAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>METHODS FOR SCRAPING YAHOO FINANCE
+ref: <a class="reference external" href="https://aroussi.com/post/python-yahoo-finance">https://aroussi.com/post/python-yahoo-finance</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stock_analysisPME.YahooAPI.capture_historical">
+<span class="sig-name descname"><span class="pre">capture_historical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stock_analysisPME.YahooAPI.capture_historical" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stock_analysisPME.main">
+<span class="sig-prename descclassname"><span class="pre">stock_analysisPME.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#stock_analysisPME.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stock_analysisPME.pop_sp500_tables">
+<span class="sig-prename descclassname"><span class="pre">stock_analysisPME.</span></span><span class="sig-name descname"><span class="pre">pop_sp500_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diff</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stock_analysisPME.pop_sp500_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>SCRAPES YAHOO FINANCE (‘^GSPC’ IS S&amp;P500 SYMBOL) TO DOWNLOAD HISTORICAL SP500 DATA AND INSERTS INTO DATABASE</p>
+<p>Valid periods are: 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Stock Portfolio Roboadvisor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, DRE Consulting.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/stock_analysisPME.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
