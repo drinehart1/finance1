@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>screen module &#8212; Stock Portfolio Roboadvisor 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-screen">
+<span id="screen-module"></span><h1>screen module<a class="headerlink" href="#module-screen" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="screen.load_stock_list">
+<span class="sig-prename descclassname"><span class="pre">screen.</span></span><span class="sig-name descname"><span class="pre">load_stock_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screen.load_stock_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>read from blotter.xlsx, which contains [at a minimum] the following fields:
+“SYMBOL”, “SHARES”, “UNITARY”, “BROKER”, “EXIT_TARGET”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Array of current holdings</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="screen.lookup">
+<span class="sig-prename descclassname"><span class="pre">screen.</span></span><span class="sig-name descname"><span class="pre">lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#screen.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>INDIVIDUAL STOCK INFO LOOKUP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stock</strong> (<em>str</em>) – STOCK TICKER SYMBOL</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="screen.main">
+<span class="sig-prename descclassname"><span class="pre">screen.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#screen.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>CORE FUNCTIONALITY OF APP:
+1. LOADs SYMBOLS FROM FILE INTO DATAFRAME
+2. CALLS MULTI-THREADED LOOKUPS (API TO FINVIZ) &amp; ADDS TO RESULTS DATAFRAME
+3. BOTH DATAFRAMES ARE RECONCILED (GROUPED ON STOCK SYMBOL) INTO mergeDf
+4. ROI (RETURN ON INVESTMENT) IS CALCULATED AND DATA FORMATTED BY COLUMN
+5. VARIOUS WORKSHEETS SAVED INTO CONSOLIDATED EXCEL FILE:</p>
+<blockquote>
+<div><p>-raw_data
+-analysts (FROM API CALL)
+-analysis (INTERNAL CALCS BASED ON PORTFOLIO)
+-portfolio (DETAILED NAV (NET ASSET VALUE) STOCK HOLDINGS BY SECTOR)
+-portfolio_breakdown (AGGREGATED HOLDINGS BY SECTOR WITH PERCENTAGE)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>str</em>) – DESTINATION PATH AND FILE</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Stock Portfolio Roboadvisor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Duane Rinehart.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/screen.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+constants\_template module
+==========================
+
+.. automodule:: constants_template
+   :members:
+   :undoc-members:
+   :show-inheritance:
