@@ -7,3 +7,14 @@ CREATE TABLE IF NOT EXISTS sp500 (
 	`low` DECIMAL NOT NULL,
 	`volume` INT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS history (
+	`date` datetime NOT NULL PRIMARY KEY,
+	`ticker` CHAR NOT NULL,
+	`open` DECIMAL NOT NULL,
+	`close` DECIMAL NOT NULL,
+	`adj_close` DECIMAL,
+	`high` DECIMAL NOT NULL,
+	`low` DECIMAL NOT NULL,
+	`volume` INT NOT NULL
+);
