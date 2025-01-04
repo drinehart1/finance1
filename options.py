@@ -117,7 +117,7 @@ def create_output_analysis(dict_constants):
         oldest_close_price, newest_close_price, days_difference, price_target, std_dev = calc_price_target(df, symbol)
         
     df_analysis = df_input[['SYMBOL']].copy()
-    df_analysis[['oldest_close_price', 'newest_close_price', 'price diff period', 'price_target', 'std_dev (cur month)']] = df_input.apply(lambda row: pd.Series(calc_price_target(df, row['SYMBOL'])), axis=1)
+    df_analysis[['oldest_close_price', 'newest_close_price', 'price diff period', 'price_target (+1mo)', 'std_dev (cur month)']] = df_input.apply(lambda row: pd.Series(calc_price_target(df, row['SYMBOL'])), axis=1)
     df_analysis['strike price (+1mo)'] = None
     df_analysis['EV (min premium)'] = None
 
@@ -127,7 +127,6 @@ def create_output_analysis(dict_constants):
             df_historical.to_excel(writer, index=False, sheet_name='historical')
             df_analysis.to_excel(writer, index=False, sheet_name='analysis')
 
-            #Format column widths to fit text (on analysis sheet)
             wb = writer.book
             ws = wb['analysis']
 
@@ -135,7 +134,7 @@ def create_output_analysis(dict_constants):
 
             # Apply formulas to 'EV' column (starting from row 2 to skip the header)
             for row in range(2, len(df_analysis) + 2):  # Start from row 2 (skip header)
-                ws[f'F{row}'] = f"=C{row}+((C{row}-B{row})/D{row}*30)"  # Set the price target formula
+                ws[f'E{row}'] = f"=C{row}+((C{row}-B{row})/D{row}*30)"  # Set the price target formula
                 ws[f'H{row}'] = f"=F{row}/SQRT(6.28)*EXP(-1/2*POWER((G{row}-E{row})/F{row},2)) - (G{row} - E{row})/2*(1-ERF((G{row}-E{row})/SQRT(2*F{row}*F{row})))"  # Set the EV formula
                 ws[f'G{row}'] = f"=ROUND(C{row},0)+ROUNDUP(C{row}*1.1/12, 0)" # Set the price target formula (10% annualized gain)
                 ws[f'G{row}'].fill = yellow_fill # Highlight column G in yellow
@@ -144,7 +143,8 @@ def create_output_analysis(dict_constants):
                 length = max(len(str(cell.value)) for cell in column_cells)
                 ws.column_dimensions[get_column_letter(column_cells[0].column)].width = length + 2
 
-            ws.column_dimensions['H'].width = 32 #force EV column width
+            ws.column_dimensions['H'].width = 32 #force EV column width (analysis)
+            wb['historical'].column_dimensions['A'].width = 12 #force data column width (historical)
 
         print(f"Data exported successfully to '{output_excel_analysis}'")
     except PermissionError as e:

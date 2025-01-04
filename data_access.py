@@ -6,20 +6,20 @@ import sqlite3
 import yfinance as yf
 
 
-class HistData:
+class HistData():
     """
     METHODS FOR CRUD OPERATIONS OF HISTORICAL DATA
     """
 
-    _db_server = constants.HIST_DB_SERVER
-    _db_name = constants.HIST_DB_NAME
-
-    def __init__(self):
+    def __init__(self, db_server: str = constants.HIST_DB_SERVER, db_name: str = constants.HIST_DB_NAME):
         """
         INIT CONNECTION TO DATABASE; IMPORTS SCHEMA IF NOT EXISTS
         """
-        if self._db_server == "sqlite":
-            self._con = sqlite3.connect(self._db_name)
+        self.db_server = db_server
+        self.db_name = db_name
+        
+        if self.db_server == "sqlite":
+            self._con = sqlite3.connect(self.db_name)
 
         try:
             self._cur = self._con.cursor()
@@ -27,9 +27,9 @@ class HistData:
             print(
                 "UNABLE TO CONNECT TO DATABASE: \n",
                 "TYPE:",
-                self._db_server + "\n",
+                self.db_server + "\n",
                 "HOST (FILENAME IF SQLITE):",
-                self._db_name,
+                self.db_name,
             )
         # finally:
         #     self._con.close()
@@ -47,7 +47,7 @@ class HistData:
         )
 
         if self._cur.fetchone()[0] != 1:
-            print("INITIALIZE DB...")
+            #print("INITIALIZE DB...")
             try:
                 sql_file = open(constants.HIST_DB_SCHEMA)
                 sql_as_string = sql_file.read()

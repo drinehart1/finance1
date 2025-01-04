@@ -1,9 +1,9 @@
 """
 CREATED: 30-JUL-2021
-LAST EDIT: 30-JUL-2021
+LAST EDIT: 22-DEC-2024
 AUTHOR: DUANE RINEHART, MBA (duane.rinehart@gmail.com)
 
-ADMIN FOR ROBO ADVISOR
+ADMIN FOR ROBO ADVISOR & OPTION TRADER
 """
 
 try:
@@ -12,40 +12,51 @@ try:
 except ImportError:
     raise ImportError("ERROR LOADING PREREQUISITE: data_access")
 
-y = YahooAPI()
-hist = HistData()
 
-
-def populate_db():
+def populate_db(db_server: str, db_name: str, db_table: str, symbols = None, period: str = '1y'):
     # ASSUMPTIONS - CAPTURE 1 YEAR OF HISTORICAL DATA ("1y")
     # SELECTION OF FUNDS LIMITED TO ETF
+    # period: intervals are: 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max
 
-    # MSFT, SPY, AAAU, VCIT : (MICROSOFT, SP500, GOLD ETF, BOND ETF)
-    symbol = "VCIT"
-    period = "1y"
+    y = YahooAPI()
+    hist = HistData(db_server, db_name)
 
-    hist_data = y.capture_historical(symbol, period)
-    # print(hist_data.columns) - show column headers [for testing]
-    for index, row in hist_data.iterrows():
-        result_date = index.to_pydatetime().date()
-        sql = """INSERT OR IGNORE INTO robo (date, symbol, close)
-                         VALUES ('{}', '{}', '{}')
-                      """.format(
-            result_date,
-            symbol,
-            row["Close"],
-        )
-        hist.qry(sql, rtn_results=False)
-    print("FINISHED POPULATING DB WITH SYMBOL: ", symbol)
+    for symbol in symbols:
+        hist_data = y.capture_historical(symbol, period)
+
+    # print(hist_data.columns) #- show column headers [for testing]
+        for index, row in hist_data.iterrows():
+            result_date = index.to_pydatetime().date()
+            sql = f"""INSERT OR IGNORE INTO {db_table} (date, symbol, open, close, high, low, volume)
+                        VALUES ('{result_date}', '{symbol}', '{row["Open"]}', '{row["Close"]}', '{row["High"]}', '{row["Low"]}', '{row["Volume"]}')
+                    """
+            # print(sql)
+            hist.qry(sql, rtn_results=False)
+        print(f"FINISHED POPULATING DB WITH SYMBOL: {symbol} for period: {period}")
 
 
-def db_stats():
+def db_table_stats(db_server: str, db_name: str, db_table: str):
+    hist = HistData(db_server, db_name)
+
+    sql = '''SELECT symbol, MIN(date) AS start_date, MAX(date) AS end_date
+        FROM history
+        GROUP BY symbol
+        ORDER BY symbol;'''
+    results = hist.qry(sql, rtn_results=True)
+    return results
+
+
+def db_stats(db_server: str, db_name: str, db_table: str):
     sql = """
     SELECT Symbol, MIN(date), MAX(date) 
     FROM robo 
     GROUP BY symbol 
     ORDER BY symbol ASC
     """
+
+    y = YahooAPI()
+    hist = HistData(db_server, db_name)
+
     results = hist.qry(sql, rtn_results=True)
     print(
         "{symbol:<6}\t{start:<10}\t{end:<10}".format(
@@ -70,6 +81,8 @@ def display_menu():
 
 def main():
     display_menu()
+    hist = HistData()
+    y = YahooAPI()
 
     while True:
         command = input("Command: ")

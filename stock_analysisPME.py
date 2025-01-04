@@ -1,6 +1,6 @@
 """
 CREATED: 3-JUN-2021
-LAST EDIT: 11-JUN-2021
+LAST EDIT: 3-JAN-2025
 AUTHOR: DUANE RINEHART, MBA (duane.rinehart@gmail.com)
 
 READS blotter.xlsx (SYMBOL,	SHARES,	UNITARY, EXTENDED, DATE, BROKER, EXIT_TARGET)
@@ -90,8 +90,8 @@ class YahooAPI:
     ref: https://aroussi.com/post/python-yahoo-finance
     """
 
-    def capture_historical(self, ticker, p):
-        stock = yf.Ticker(ticker)
+    def capture_historical(self, strTicker: str, p):
+        stock = yf.Ticker(strTicker)
         d = stock.history(period=p)
         df = pd.DataFrame(data=d)
         return df  # RETURN DATAFRAME OF ALL HISTORICAL [RAW] QUOTES

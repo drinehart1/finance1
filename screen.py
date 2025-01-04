@@ -1,13 +1,10 @@
 # SRC: https://github.com/mariostoev/finviz
 
 # CREATED: 30-OCT-2020
-# LAST EDIT: 16-MAY-2022
+# LAST EDIT: 17-JUL-2023
 # AUTHOR: DUANE RINEHART, MBA (duane.rinehart@gmail.com)
 
 # IMPLEMENTS API CONNECTION TO STOCK INFORMATION SERVICE FINVIZ FOR PURPOSES OF STOCK SCREENING
-
-# REQUIRES:
-# - PYTHON 3.6+
 
 # LOAD PREREQUISITES
 import symtable
@@ -183,7 +180,7 @@ def main(output : str):
     workbook = writer.book
     worksheet = writer.sheets["portfolio"]
     worksheet.set_column("D:E", None, format1)
-    writer.save()
+    writer.close()
 
     # NEED TO GET SUBTOTALS BY SECTOR, % PORTFOLIO BY SECTOR
 

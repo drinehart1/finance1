@@ -1,1 +1,8 @@
 /constants.py
+/constants.json
+/output
+/finance.db
+/hist.db
+/.idea
+/.vs
+/__pycache__
