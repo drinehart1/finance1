@@ -1,0 +1,20 @@
+External references to use python for trading automation:
+Note: This is risky business.  I am not responsibile for losses if you loose your shirt! Use at your own risk.
+
+Options discussion: https://community.bitopex.io/unlocking-the-power-of-python-in-option-trading/
+
+WeBull (broker) access: https://www.pythonpool.com/webull-package-in-python/
+
+Historical data access from Yahoo Finance: https://aroussi.com/post/python-yahoo-finance
+
+Options analysis repositories: https://github.com/topics/options-trading
+Tool repositories: https://tradestie.com/apps/user/blog/top-10-python-libraries-for-stock-options-trading/
+Options backtester repository: https://github.com/sirnfs/OptionSuite
+Another options backtester: https://github.com/michaelchu/optopsy/wiki
+primer on optopsy: https://pipekit.io/blog/options-backtesting-in-python-an-introductory-walkthrough
+
+Options wheel strategy: https://alpaca.markets/learn/options-wheel-strategy
+
+Not options - just dividends: https://thedividendtracker.com/
+
+Last Update: 3-JAN-2025
